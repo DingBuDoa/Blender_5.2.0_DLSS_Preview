@@ -1,0 +1,147 @@
+========================================
+Blender 5.2 + DLSS Preview – Build Commands
+========================================
+
+ Prerequisites
+----------------------------------------
+- Blender 5.2 source code (cloned locally)
+- Visual Studio 2022 (with C++ desktop development workload)
+- CMake 3.21+
+- NVIDIA RTX GPU (20/30/40/50 series)
+- NVIDIA Driver ≥ 590
+- DLSS SDK (download from NVIDIA developer site)
+- OptiX SDK 8.0+ (download from NVIDIA developer site)
+- CUDA Toolkit 12.8+
+
+ Directory Structure
+----------------------------------------
+Assume your working directory is D:\Blender5.2DLss:
+
+D:\Blender5.2DLss\
+├── blender\          # Blender 5.2 source code
+├── DLSS\             # DLSS SDK (contains include/ and lib/)
+└── optix_sdk\        # OptiX SDK (contains include/optix.h)
+
+ Important: Use the correct terminal
+----------------------------------------
+You MUST use: x64 Native Tools Command Prompt for VS 2022
+(Normal CMD or PowerShell will NOT work)
+
+ Build Steps
+----------------------------------------
+
+1. Go to your working directory and create the build folder
+   cd D:\Blender5.2DLss
+   mkdir build
+   cd build
+
+2. Run CMake configuration
+   cmake ..\blender -A x64 -DWITH_DLSS=ON -DDLSS_SDK_PATH=D:/Blender5.2DLss/DLSS -DWITH_CYCLES_DEVICE_CUDA=ON -DWITH_CYCLES_DEVICE_OPTIX=ON -DOPTIX_INCLUDE_DIR=D:/optix_sdk/include -DWITH_CYCLES_CUDA_BINARIES=ON -DCYCLES_CUDA_BINARIES_ARCH="sm_89" -DCUDA_NVCC_FLAGS="-Xcompiler=/utf-8 --allow-unsupported-compiler"
+
+    If your paths are different, update these:
+      - D:/Blender5.2DLss/DLSS       → your DLSS SDK path
+      - D:/optix_sdk/include         → your OptiX SDK path
+
+    GPU Architecture Mapping:
+      - RTX 20 series: sm_75
+      - RTX 30 series: sm_86
+      - RTX 40 series: sm_89
+      - RTX 50 series: sm_90
+      - Multiple architectures: use semicolon, e.g. "sm_86;sm_89;sm_90"
+
+3. Compile and install
+   cmake --build . --target install --config Release
+
+4. Copy the DLSS runtime DLL (required for DLSS to work!)
+   copy D:\Blender5.2DLss\DLSS\lib\Windows_x86_64\rel\nvngx_dlss.dll D:\Blender5.2DLss\install\
+
+5. Launch Blender
+   cd D:\Blender5.2DLss\install
+   blender.exe
+
+ Verify DLSS
+----------------------------------------
+- Edit → Preferences → System → Cycles Render Devices → enable OptiX or CUDA
+- New scene → switch to Cycles
+- Render Properties → Denoising → select DLSS
+- Switch viewport to Rendered mode (shortcut: Z → Rendered)
+
+ Additional Notes
+----------------------------------------
+- This is a preview build based on PR #153077 – for testing only
+- Build time: approximately 2–3 hours (depends on CPU)
+- Version string has been changed to: 5.2.0 DLSS Preview
+
+========================================
+Blender 5.2 + DLSS 预览版 编译命令
+========================================
+
+ 前置要求
+----------------------------------------
+- Blender 5.2 源码（已克隆）
+- Visual Studio 2022（含 C++ 桌面开发）
+- CMake 3.21+
+- NVIDIA RTX 显卡（20/30/40/50 系列）
+- NVIDIA 驱动 ≥ 590
+- DLSS SDK（NVIDIA 开发者下载）
+- OptiX SDK 8.0+（NVIDIA 开发者下载）
+- CUDA Toolkit 12.8+
+
+ 目录结构
+----------------------------------------
+假设工作目录为 D:\Blender5.2DLss：
+
+D:\Blender5.2DLss\
+├── blender\          # Blender 5.2 源码
+├── DLSS\             # DLSS SDK（包含 include/ 和 lib/）
+└── optix_sdk\        # OptiX SDK（包含 include/optix.h）
+
+ 重要：必须使用 VS 开发者命令行
+----------------------------------------
+请打开：x64 Native Tools Command Prompt for VS 2022
+（普通 CMD 或 PowerShell 不行）
+
+ 编译步骤
+----------------------------------------
+
+1. 进入工作目录并创建 build 文件夹
+   cd D:\Blender5.2DLss
+   mkdir build
+   cd build
+
+2. 运行 CMake 配置
+   cmake ..\blender -A x64 -DWITH_DLSS=ON -DDLSS_SDK_PATH=D:/Blender5.2DLss/DLSS -DWITH_CYCLES_DEVICE_CUDA=ON -DWITH_CYCLES_DEVICE_OPTIX=ON -DOPTIX_INCLUDE_DIR=D:/optix_sdk/include -DWITH_CYCLES_CUDA_BINARIES=ON -DCYCLES_CUDA_BINARIES_ARCH="sm_89" -DCUDA_NVCC_FLAGS="-Xcompiler=/utf-8 --allow-unsupported-compiler"
+
+    如果路径不同，请修改以下路径为你自己的：
+      - D:/Blender5.2DLss/DLSS       → 你的 DLSS SDK 路径
+      - D:/optix_sdk/include         → 你的 OptiX SDK 路径
+
+    显卡架构说明：
+      - RTX 20 系列：sm_75
+      - RTX 30 系列：sm_86
+      - RTX 40 系列：sm_89
+      - RTX 50 系列：sm_90
+      - 同时支持多个：用分号分隔，如 "sm_86;sm_89;sm_90"
+
+3. 编译并安装
+   cmake --build . --target install --config Release
+
+4. 复制 DLSS 运行时 DLL（必须！否则 DLSS 不生效）
+   copy D:\Blender5.2DLss\DLSS\lib\Windows_x86_64\rel\nvngx_dlss.dll D:\Blender5.2DLss\install\
+
+5. 启动 Blender
+   cd D:\Blender5.2DLss\install
+   blender.exe
+
+ 验证 DLSS
+----------------------------------------
+- 编辑 → 偏好设置 → 系统 → Cycles 渲染设备 → 启用 OptiX 或 CUDA
+- 新建场景 → 切换到 Cycles
+- 渲染属性 → 降噪 → 选择 DLSS
+- 视口切换渲染模式（快捷键 Z → Rendered）
+
+ 其他说明
+----------------------------------------
+- 这是基于 PR #153077 的 DLSS 预览版，仅供测试
+- 编译时间约 2-3 小时（取决于 CPU）
+- 版本号已标识为：5.2.0 DLSS Preview
