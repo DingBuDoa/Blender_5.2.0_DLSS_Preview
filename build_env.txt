@@ -1,0 +1,6 @@
+use
+- Visual Studio 2022
+- CMake 3.21+
+- NVIDIA DLSS SDK
+- OptiX SDK 8.0+
+- CUDA Toolkit 12.8+
