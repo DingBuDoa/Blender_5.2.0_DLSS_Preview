@@ -30,7 +30,6 @@ It drastically cuts waiting time during iterative material, lighting and lookdev
 ### Build Information
 Compiled from Blender main branch source code on Windows.
 CUDA, OptiX and DLSS SDK are enabled during compilation.
-Prebuilt CUDA kernels for sm_89 (RTX 40 series) are included.
 
 ### License
 Blender original source code is licensed under the **GNU General Public License v3.0 (GPLv3)**.
@@ -38,9 +37,13 @@ This custom build links against NVIDIA DLSS SDK, a proprietary library governed 
 The DLSS component is closed-source and incompatible with GPLv3 terms.
 This preview build is provided for non-commercial testing purposes only.
 
+Base upstream source: https://projects.blender.org/blender/blender
+This build is compiled from official Blender main branch source, only build configuration parameters are adjusted to enable DLSS, OptiX and CUDA.
+No manual modification to the source code logic. You can reproduce this build using the build command provided in this repository.
+
 ---
 
-## 中文介绍
+## 中文
 本项目是非官方手动编译的 Blender 5.2.0 预览构建版，为Cycles路径追踪渲染器增加实验性DLSS光线重建功能。
 
 ### 简介
@@ -67,10 +70,13 @@ DLSS光线重建相当于一套高阶AI降噪与细节重建方案。
 - 稳定的官方DLSS支持将在Blender 5.3版本到来。
 
 ### 编译信息
-基于Windows环境编译Blender主线源码，编译时开启CUDA、OptiX、DLSS SDK，内置RTX40系sm_89预编译CUDA内核。
+基于Windows环境编译Blender主线源码，编译时开启CUDA、OptiX、DLSS SDK
 
 ### 许可证说明
 Blender 原始源码遵循 **GNU General Public License v3.0 (GPLv3)** 开源协议。
 本定制构建链接了 NVIDIA DLSS SDK，该组件为专有闭源软件，受NVIDIA终端用户许可协议(EULA)约束。
 DLSS相关库不属于开源代码，与GPLv3存在协议不兼容问题。
 本预览编译版本仅供非商业测试使用。
+
+上游源码地址：https://projects.blender.org/blender/blender
+本构建基于官方Blender主线源码编译，仅调整构建配置参数，启用DLSS、OptiX、CUDA编译选项，未手动修改源代码逻辑。你可以使用仓库内提供的编译命令复现相同版本。
